@@ -1,4 +1,4 @@
-def financialstatment(fsname, fstitle, fsyears):
+def financialstatment(fsname, fstitle, fsyears):#Financial Statement Functions
     yearstart = input("Enter first year of the financial statement:")
     fsheader = [ "#" ," "]
     i = 0
@@ -67,19 +67,21 @@ def ksub(sysSecStatement, subIndex, subLabel,subList):
     new.append(subList)
     sysSecStatement.insert(subIndex, new) 
 
-def banksystem(bankName, reserveAmmount):
+def banksystem(bankName, reserveAmmount): #Bank Functions
     class Bank:
-        def _init_(account, accNumber, accId, accHolder,accType, accState, accBalance):
+        def _init_(account, accNumber, accId, accHolder,accType, accState, accBalance, accRecord):
+            accRecord = set(["Date", "Account", "Source", "Tansaction", "Amount"])
             account.accNumber = accNumber
             account.accId = accId
             account.accHolder = accHolder
             account.accType = accType   
             account.accState= accState
             account.accBalance= accBalance
+            account.accRecord = accRecord
 
-    bankIterList = {"bankReserve"}
-    lockList = {}
-    activeList = {}
+    bankIterList = ["bankReserve"]
+    lockList = []
+    activeList = []
 
     def baccount(accountId, accountHolder, accountType):
         accountId = Bank(accountId, accountHolder, accountType)
@@ -106,7 +108,20 @@ def banksystem(bankName, reserveAmmount):
 
         del accountId
     
-    def br
+    #Retail Bank Functions
+    def brdeposit(currentDate, accountId, cashAmount):
+        accountId.accBalance += cashAmount
+        bankReserve.accBalance += cashAmount
+        accountId.accRecord.add[[currentDate, "System", accountId, cashAmount]]
+    def brwithdraw(currentDate, accountId, cashAmount):
+        accountId.accBalance -= cashAmount
+        bankReserve.accBalance -= cashAmount
+        accountId.accRecord.add[[currentDate, "System", accountId, "Withdraw",cashAmount]]
+    def brtransfer(currentDate, accountSource, accountTarget, cashAmount):
+        accountSource.accBalance -= cashAmount
+        accountTarget.accBalance += cashAmount
+        accountSource.accRecord.add[[currentDate, "System", accountSource, "Transfer-Withdraw",cashAmount]]
+        accountTarget.accRecord.add[[currentDate, "System", accountTarget, "Transfer-Deposit",cashAmount]]
 
 
 

@@ -69,35 +69,33 @@ def ksub(sysSecStatement, subIndex, subLabel,subList):
 
 def banksystem(bankName, reserveAmmount): #Bank Functions
     class Bank:
-        def _init_(account, accNumber, accId, accHolder,accType, accState, accBalance, accRecord):
-            accRecord = set(["Date", "Account", "Source", "Tansaction", "Amount"])
-            account.accNumber = accNumber
-            account.accId = accId
-            account.accHolder = accHolder
-            account.accType = accType   
-            account.accState= accState
-            account.accBalance= accBalance
-            account.accRecord = accRecord
+        def _init_(self, accNumber, accId, accHolder,accType, accState, accBalance, accRecord):
+            accRecord = (["Date", "Account", "Source", "Tansaction", "Amount"])
+            self.accNumber = accNumber
+            self.accId = accId
+            self.accHolder = accHolder
+            self.accType = accType   
+            self.accState= accState
+            self.accBalance= accBalance
+            self.accRecord = accRecord
 
-    bankIterList = ["bankReserve"]
-    lockList = []
-    activeList = []
+    bankIterList = ["bankReserve"]#Bank Account Iterating List
+    lockList = []#For Account Freezing or bafreeze()
+    activeList = []#For Account currently active or running
 
+    #Bank Account Functions
     def baccount(accountId, accountHolder, accountType):
         accountId = Bank(accountId, accountHolder, accountType)
         bankIterList.add(accountId.accId)
         activeList.add(accountId.accId)
         accountId.accNumber= bankIterList.index(accountId)
 
+    bankReserve= Bank(0,"bankReserve",bankName, 0, 1,reserveAmmount) #Bank System Reserves
 
-    bankReserve= Bank(0,"bankReserve",bankName, 0, 1,reserveAmmount) 
-         
     def bafreeze(accountId):
         accountId.accState=0
         activeList.remove(accountId)
         lockList.add(accountId)
-        
-    
     def baclose(accountId):
         bankReserve.accBalance += accountId.accBalance
         bankIterList.remove(accountId)

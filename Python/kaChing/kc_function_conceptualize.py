@@ -505,3 +505,4 @@ def financialstatement(fsmode, fsname, fstitle, fsyears):
 financialstatement(3,"c41balsheet","C41 Graphics Co. 2023 Bal. Sheet", 5)
 
 print("yadaydaydaydya \t yadadyaydayda")
+

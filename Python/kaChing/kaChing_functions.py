@@ -144,37 +144,37 @@ def bankSystem(bankName, reserveAmmount): #Bank Functions
     
 
         #Retail Bank Functions
-        def brdeposit(currentDate, accountId, cashAmount):
+        def brdeposit( accountId, cashAmount):
             if(accountId.accountType == 0):
                 accountId.creditbalance -= cashAmount
                 accountId.accRecord.add[[currentDate, "System", "Payment", cashAmount]]
             elif(accountId.accountType == 1):
                 accountId.debitBalance += cashAmount
                 bankReserve.debitBalance += cashAmount
-                accountId.accRecord.add[[currentDate, "System", "Deposit", cashAmount]]
+                accountId.accRecord.add[[datetime.now(),  "System", "Deposit", cashAmount]]
             
             
-        def brwithdraw(currentDate, accountId, cashAmount):
+        def brwithdraw( accountId, cashAmount):
             if(accountId.accountType == 0):
                 if(accountId.creditLimit > accountId.creditBalance+cashAmount):
                     accountId.creditbalance += cashAmount
-                    accountId.accRecord.add[[currentDate, "System", "Credit", cashAmount]]
+                    accountId.accRecord.add[[datetime.now(),  "System", "Credit", cashAmount]]
                 else:
                     print("Credit Limit Reached")            
             elif(accountId.accountType == 1):
                 if(accountId.debitBalance-cashAmount > 0):
                     accountId.debitBalance -= cashAmount
                     bankReserve.debitBalance -= cashAmount
-                    accountId.accRecord.add[[currentDate, "System", "Withdraw",cashAmount]]
+                    accountId.accRecord.add[[datetime.now(), "System", "Withdraw",cashAmount]]
                 else:
                     print("Insufficient Balance")    
                 
             
-        def brtransfer(currentDate, accountSource, accountTarget, cashAmount):
+        def brtransfer(accountSource, accountTarget, cashAmount):
             accountSource.debitBalance -= cashAmount
             accountTarget.debitBalance += cashAmount
-            accountSource.accRecord.add([[currentDate, accountTarget, "Transfer-Withdraw", cashAmount]])
-            accountTarget.accRecord.add([[currentDate, accountSource, "Transfer-Deposit", cashAmount]])
+            accountSource.accRecord.add([[datetime.now(), accountTarget, "Transfer-Withdraw", cashAmount]])
+            accountTarget.accRecord.add([[datetime.now(), accountSource, "Transfer-Deposit", cashAmount]])
         
         payrollIterList = []#Payroll Account Iterating List
 
@@ -218,8 +218,8 @@ def bankSystem(bankName, reserveAmmount): #Bank Functions
                     totalDeductions = employeeBenefits + employeeDeductions + incomeTax
                     netPay= totalEarnings - totalDeductions
 
-                    brtransfer(datetime.now(), companyId, employeeBank, netPay)
-                    brwithdraw(datetime.now(), companyId, employerContributions)
+                    brtransfer( companyId.debitBalance, employeeBank.debitBalance, netPay)
+                    brwithdraw( companyId.debitBalance, employerContributions)
 
 
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-def financialstatment(fsname, fstitle, fsyears):#Financial Statement Functions
+def financialStatment(fsname, fstitle, fsyears):#Financial Statement Functions
     yearstart = input("Enter first year of the financial statement:")
     fsheader = [ "#" ," "]
     i = 0
@@ -69,7 +69,7 @@ def ksub(sysSecStatement, subIndex, subLabel,subList):
     new.append(subList)
     sysSecStatement.insert(subIndex, new) 
 
-def banksystem(bankName, reserveAmmount): #Bank Functions
+def bankSystem(bankName, reserveAmmount): #Bank Functions
     class Bank:
         def _init_(self, accNumber=0, accId="", accHolder="",accType=0, accState=0, accRecord=[]):
             accRecord = (["Date", "Account", "Tansaction", "Amount"])
@@ -158,30 +158,47 @@ def banksystem(bankName, reserveAmmount): #Bank Functions
         payrollIterList = []#Payroll Account Iterating List
 
         class Employee:
-            def _init_(self, companyName="", employeeID="", employeeName="", employeePayRate=0, lifeInsurance=0, healthInsurance=0):
+            def _init_(self, companyName="", employeeID="", employeeName="", employeePayRate=0, socialSecurity=0, healthInsurance=0, hdmf=0):
                 self.companyName= companyName
                 self.employeeID= employeeID
                 self.employeeName= employeeName
                 self.employeePayRate= employeePayRate
-                self.lifeInsurance= lifeInsurance
+                self.socialSecurity= socialSecurity
                 self.healthInsurance= healthInsurance
+                self.hdmf= hdmf
+                benefits=[socialSecurity, healthInsurance, hdmf]
 
         def bcpayroll(companyId, companyName ):
             payrollIterList.append(companyId)
             companyId = Bank(len(bankIterList), companyId, companyName, 1, 0, reserveAmmount, "acc" + str(len(bankIterList)) + "Payroll" + str(len(payrollIterList)))
             companyName = []
 
-            def bcemployee(companyName, employeeId, employeeBank, employeeName, employeePayRate, lifeInsurancerate, healthInsuranceRate):
-                employeeId = Employee(companyName, employeeId, employeeName, employeePayRate, lifeInsurancerate, healthInsuranceRate)
+            def bcemployee(companyName, employeeId, employeeBank, employeeName, employeePayRate, socialSecurityRate, healthInsuranceRate, hdmfRate):
+                employeeId = Employee(companyName, employeeId, employeeName, employeePayRate, socialSecurityRate, healthInsuranceRate, hdmfRate)
                 employeeBank = Bank(len(bankIterList), companyId, employeeName, 1, 0, 0, "acc" + str(len(bankIterList)) + "Payroll" + str(len(payrollIterList)))
                 companyName.append(employeeId)
             
-                def bcrollout(companyId, employeeBank, employeeHours, employeeDeductions, lifeInsuranceBool, healthInsuranceBool):
-                    totalSalary = employeeId.employeePayRate * employeeHours
-                    totalDeduction = (lifeInsurancerate*totalSalary if lifeInsuranceBool == 1 else 0 ) + (healthInsuranceRate*totalSalary if healthInsuranceBool == 1 else 0 ) + employeeDeductions
-                    totalPay= totalSalary - totalDeduction
+                def bcrollout(companyId, employeeId, employeeBank, employeeHours, employeeOvertime, employeeDeductions, socialSecurity, healthInsurance, hdmf):
+                    totalEarnings = employeeId.employeePayRate * employeeHours + employeeId.employeePayRate*1.5*employeeOvertime
+                    employeeBenefits = employeeId.benefits[0]*0.045*totalEarnings*socialSecurity +  employeeId.benefits[1]*0.02*totalEarnings*healthInsurance + employeeId.benefits[2]*(0.01 if totalEarnings>1500 else 0.02)*totalEarnings*hdmf
+                    employerContributions = employeeId.benefits[0]*0.095*totalEarnings*socialSecurity +  employeeId.benefits[1]*0.02*totalEarnings*healthInsurance + employeeId.benefits[2]*0.02*totalEarnings*hdmf
+                    if(totalEarnings<=20833):
+                        incomeTax=0
+                    elif(totalEarnings>20833&totalEarnings<=33333):
+                        incomeTax=totalEarnings*0.15
+                    elif(totalEarnings>33333&totalEarnings<=66667):
+                        incomeTax=totalEarnings*0.20
+                    elif(totalEarnings>66667&totalEarnings<=166667):
+                        incomeTax=totalEarnings*0.25
+                    elif(totalEarnings>166667&totalEarnings<=666667):
+                        incomeTax=totalEarnings*0.30
+                    elif(totalEarnings>666667):
+                        incomeTax=totalEarnings*0.35
+                    totalDeductions = employeeBenefits + employeeDeductions + incomeTax
+                    netPay= totalEarnings - totalDeductions
 
-                    brtransfer(datetime.now(), companyId, employeeBank, totalPay)
+                    brtransfer(datetime.now(), companyId, employeeBank, netPay)
+                    brwithdraw(datetime.now(), companyId, employerContributions)
 
 
 

@@ -42,32 +42,53 @@ def financialStatment(fsname, fstitle, fsyears):#Financial Statement Functions
         fsname.append(fsbody[i])        
     fsname.append(fstotal)
 
-def ktotal(sysSecSource, sysSecName, sysSecTitle):
-    sysSecName = [" ", sysSecTitle]
-    column=len(sysSecSource[0])
-    i=0
-    j=2
-    while j<column:
-        currenttotal=0
-        for i in range(len(sysSecSource)):
-            currenttotal += int(sysSecSource[i][j])
-            sysSecName.append(currenttotal)
-            j += 1
+    def ktotal(sysSecStatement, sysSecTotal, sysSecTitle):
+        sysSecTotal = [" ", sysSecTitle]
+        column=len(sysSecSource[0])
+        i=0
+        j=2
+        while j<column:
+            currenttotal=0
+            for i in range(len(sysSecStatement)):
+                currenttotal += int(sysSecStatement[i][j])
+                sysSecTotal.append(currenttotal)
+                j += 1
+        sysSecStatement.append(sysSecTotal)
 
-def kadd(sysSecStatement, addIndex, addLabel,addList):
-    new = ["",addLabel,]
-    for i in range(len(addList)):
-        addList[i] = abs(addList[i])
-    new.append(addList)
-    sysSecStatement.insert(addIndex, new) 
+    def kadd(sysSecStatement, addIndex, addLabel,addList):
+        new = ["",addLabel,]
+        for i in range(len(addList)):
+            addList[i] = abs(addList[i])
+        new.append(addList)
+        sysSecStatement.insert(addIndex, new) 
 
+    def ksub(sysSecStatement, subIndex, subLabel,subList):
+        new = ["",subLabel,]
+        for i in range(len(subList)):
+            subList[i] = 0-abs(subList[i])
+        new.append(subList)
+        sysSecStatement.insert(subIndex, new) 
+    
+    def ksection(sysSecStatement, secName, secTitle):
+        secName=[[]]
+        secHeader = [ "#" ,secTitle]
+        i = 0
+        fsyears = len(sysSecStatement[0]) -2
+        while i<fsyears:
+            secHeader.append("")
+            i += 1
+        secName.append(secHeader)
+        sysSecStatement.append(secName)
 
-def ksub(sysSecStatement, subIndex, subLabel,subList):
-    new = ["",subLabel,]
-    for i in range(len(subList)):
-        subList[i] = 0-abs(subList[i])
-    new.append(subList)
-    sysSecStatement.insert(subIndex, new) 
+    def kupdate(sysSecStatement, rowIndex, year, updateData):
+        columnIndex= fsheader.index(year)
+        sysSecStatement[[rowIndex+2][columnIndex]] = updateData
+
+    def kremove(sysSecStatement, rowIndex):
+        sysSecStatement.pop(rowIndex+2)
+
+    def kdelete(sysSecStatement):
+        del sysSecStatement
 
 def bankSystem(bankName, reserveAmmount): #Bank Functions
     class Bank:
